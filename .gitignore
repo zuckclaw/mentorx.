@@ -1,0 +1,22 @@
+# Dependencies
+/node_modules
+/frontend/node_modules
+/backend/vendor
+
+# Build and Temp files
+/dist
+/frontend/dist
+/frontend/android/
+/frontend/ios/
+/backend/storage/
+*.log
+*.zip
+*.swp
+.env
+
+# MacOS/Windows special files
+.DS_Store
+Thumbs.db
+
+# Explicitly ignore the problematic copy folder you had:
+frontend/node_modules - Copy/   

@@ -1,0 +1,21 @@
+{
+  "appId": "com.example.app",
+  "appName": "frontend",
+  "webDir": "dist",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#ffffff",
+      "showSpinner": true,
+      "androidSpinnerStyle": "large",
+      "spinnerColor": "#000000"
+    }
+  },
+  "server": {
+    "androidScheme": "http"
+  }
+}

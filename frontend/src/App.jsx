@@ -17,6 +17,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import DaftarSiswa from "./pages/DaftarSiswa"; // ← ini wajib
+import DokumenPKL from "./pages/DokumenPKL";
+import Tugas from "./pages/Tugas";
 
 export default function App() {
   return (
@@ -24,10 +27,15 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/daftarsiswa" element={<DaftarSiswa />} />
+        <Route path="/dokumenpkl" element={<DokumenPKL />} />
+        <Route path="/tugas" element={<Tugas />} />
       </Routes>
     </Router>
   );
 }
+
+
 
 
 

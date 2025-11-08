@@ -42,6 +42,7 @@ STUDENTS = [
     ("13121", "050064489", "Ririn Suhartini"),
     ("13122", "050064490", "Rizki Syahrul Ramadhan"),
     ("13123", "050064491", "Virza Rizky"),
+    # ... (data lainnya tetap sama)
 ]
 
 class Command(BaseCommand):
@@ -51,22 +52,38 @@ class Command(BaseCommand):
         kelas_obj, _ = Kelas.objects.get_or_create(nama="XII")
         jurusan_obj, _ = Jurusan.objects.get_or_create(nama="Rekayasa Perangkat Lunak")
 
-        for nis, username, nama in STUDENTS:
+        for nis, username, full_name in STUDENTS:
+            # Split nama lengkap menjadi first_name dan last_name
+            name_parts = full_name.split()
+            first_name = name_parts[0] if name_parts else ""
+            last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
+            
+            # Buat atau update user
             user, created = User.objects.get_or_create(
                 username=username,
                 defaults={
-                    "nama": nama,
+                    "first_name": first_name,
+                    "last_name": last_name,
                     "nis": nis,
                     "role": "siswa",
                     "email": f"{username}@example.com",
                 }
             )
-            # update password supaya sama dengan NIS (hash)
+            
+            # Jika user sudah ada, update field yang diperlukan
+            if not created:
+                user.first_name = first_name
+                user.last_name = last_name
+                user.nis = nis
+                user.role = "siswa"
+                user.email = f"{username}@example.com"
+            
+            # Set password sama dengan NIS
             user.set_password(nis)
             user.save()
 
-            # buat data siswa
-            Siswa.objects.get_or_create(
+            # Buat atau update data siswa
+            siswa, siswa_created = Siswa.objects.get_or_create(
                 user=user,
                 defaults={
                     "nis": nis,
@@ -74,10 +91,17 @@ class Command(BaseCommand):
                     "jurusan": jurusan_obj
                 }
             )
+            
+            # Update jika siswa sudah ada
+            if not siswa_created:
+                siswa.nis = nis
+                siswa.kelas = kelas_obj
+                siswa.jurusan = jurusan_obj
+                siswa.save()
 
             if created:
-                self.stdout.write(self.style.SUCCESS(f"Created {username} - {nama}"))
+                self.stdout.write(self.style.SUCCESS(f"Created {username} - {full_name}"))
             else:
-                self.stdout.write(self.style.WARNING(f"Updated password for {username}"))
+                self.stdout.write(self.style.WARNING(f"Updated {username} - {full_name}"))
 
-        self.stdout.write(self.style.SUCCESS("✅ Seeding selesai."))
+        self.stdout.write(self.style.SUCCESS("✅ Seeding siswa selesai."))
